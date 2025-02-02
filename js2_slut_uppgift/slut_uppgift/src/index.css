@@ -1,0 +1,62 @@
+h1{
+ size: 24px; 
+}
+h2{
+  size: 24px;}
+h3{
+    size: 24px;
+}
+h4{
+    size:24px;
+}
+.space-y-1{
+margin-top: 1rem;
+}
+.space-y-2{
+    margin-top: 2rem;
+}
+.background-color-header{
+    background-color: grey;
+}
+.container{
+    padding: 100px;
+}
+footer{
+    background-color: black;
+}
+.flex{
+    display: flex;
+}
+.container{
+    padding: 5px;
+}
+.dropdown{
+    position: absolute;
+    background-color: transparent;
+    inset: 0;
+}
+.itemdropdown{
+    position: absolute;
+    padding: 5px;
+    background-color: white;
+    right: 0;
+    z-index: 10;
+    margin-top: 2;
+    border-radius: 6px;
+    
+}
+.product-layout{
+    display: grid;
+    grid-column: 2;
+    gap: 8;
+}
+.Cartitembox{
+    display: flex;
+    justify-content: space-between;
+}
+.tracker{
+    font-size: 5px;
+    position: absolute;
+    right: 0;
+    background-color: red;
+}

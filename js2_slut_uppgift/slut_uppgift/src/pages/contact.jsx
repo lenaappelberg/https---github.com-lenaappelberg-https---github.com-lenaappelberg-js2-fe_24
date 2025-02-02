@@ -2,9 +2,10 @@ import { useState } from "react"
 const Contacts=()=> {
     const[formData,setFormData]=useState({
         firstname:'',
-        epostaddress:'',
+        email:'',
         message:''
     })
+    const [submissionStatus,setSubmissionStatus]=useState(null)
     const [formerrors, setformerrors] = useState({})
     const handleChange=(e)=>{
         setFormData(data=>{
@@ -14,30 +15,35 @@ const Contacts=()=> {
         })
     }
     async function Contactmessage(firstname,epostaddress,message){
+        console.log(firstname,epostaddress,message)
         const sendmessage= await fetch("https://js2-ecommerce-api.vercel.app/api/messages",{
             method:'POST',
-            body:{
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body: JSON.stringify({
             "name":firstname,
             "email":epostaddress,
             "message":message
-            }
+            })
         })
         try {
             const res=await sendmessage.json();
-            return(
-                <div className="popup">
-                    <p>{res}</p>
-                </div>
-            )
+            console.log(res)
+            if (res.message==="Message sent successfully") {
+                setSubmissionStatus("success");
+                console.log("ok")
+            }
         } catch (error) {
             console.log(error.message)
+            setSubmissionStatus("error");
         }
     }
     const handleSubmit=(e)=>{
         e.preventDefault()
-        validate()
+        setSubmissionStatus(null);
         if (validate()) {
-            Contactmessage(formData.firstname,formData.epostaddress,formData.message)
+            Contactmessage(formData.firstname,formData.email,formData.message)
         }
     }
     const validate=()=>{
@@ -48,7 +54,7 @@ const Contacts=()=> {
                 firstname:'You need to enter a firstname'
             }))
         }
-        if(formData.epostaddress.trim()===''){
+        if(formData.email.trim()===''){
             setformerrors(err=>({
                 ...err,
                 epostaddress:'You need to enter a epostaddress'
@@ -70,21 +76,24 @@ const Contacts=()=> {
         </h1>
         <form onSubmit={handleSubmit}>
             <div className="form-group">
-            <label htmlFor=""value={formData.name} onChange={handleChange} id='name'>Name</label>
-            <input type="text" />
+            <label htmlFor="firstname">Name</label>
+            <input type="text" value={formData.firstname} onChange={handleChange} id='firstname'/>
             {formerrors.firstname&&<p>error</p>}
             </div>
             <div className="form-group">
-            <label htmlFor=""value={formData.email} id='email'>Epostaddress</label>
-            <input type="text" />
+            <label htmlFor="email">Epostaddress </label>
+            <input type="text"value={formData.email} onChange={handleChange} id='email'/>
             {formerrors.epostaddress&&<p>error</p>}
             </div>
             <div className="form-group">
-            <label htmlFor=""value={formData.message} id='message'>Message</label>
-            <input type="text" />
+            <label htmlFor="message">Message</label>
+            <input type="text"value={formData.message} onChange={handleChange} id='message' />
+            {formerrors.message&&<p>error</p>}
             </div>
             <button>Send</button>
-        </form>
+            {submissionStatus==="success" &&<p>message sent successfully</p>}
+            {submissionStatus==="error"&&<p>failed to send message</p>}
+        </form> 
         </div>
     )
 }
